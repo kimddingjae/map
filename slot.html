@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>대한민국 도/시군 슬롯머신</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 0; padding: 0; }
+    #map { width: 100%; height: 400px; margin-top: 20px; }
+    .slot {
+      font-size: 1.5em;
+      margin: 10px;
+      padding: 10px;
+      border: 2px solid #444;
+      border-radius: 8px;
+      display: inline-block;
+      width: 200px;
+      background-color: #f2f2f2;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+  <!-- ✅ Kakao Maps API 스크립트 (defer 안 씀 → 아래서 window.onload 사용) -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=dad017c4813a35cb8acfc0a9f2e38ed1&libraries=services"></script>
+</head>
+<body>
+
+  <h1>대한민국 도/시군 슬롯머신</h1>
+
+  <div>
+    <div class="slot" id="do">도</div>
+    <div class="slot" id="sigun">시/군/구</div>
+  </div>
+
+  <button onclick="spin()">돌리기</button>
+
+  <div id="map"></div>
+
+  <script>
+    let map, geocoder, marker, circle;
+
+    const regions = {
+      "충청북도": ["청주시", "충주시", "제천시", "보은군", "옥천군", "영동군", "진천군", "괴산군", "음성군", "단양군", "증평군"],
+      "경기도": ["수원시", "성남시", "고양시", "용인시", "부천시", "안산시", "안양시", "평택시", "시흥시"],
+      "서울특별시": ["강남구", "서초구", "종로구", "중구", "용산구", "송파구"]
+    };
+
+    window.onload = function () {
+      const mapContainer = document.getElementById('map');
+      const mapOption = {
+        center: new kakao.maps.LatLng(36.5, 127.5),
+        level: 13
+      };
+
+      map = new kakao.maps.Map(mapContainer, mapOption);
+      geocoder = new kakao.maps.services.Geocoder();
+    };
+
+    function spin() {
+      const doElem = document.getElementById('do');
+      const sigunElem = document.getElementById('sigun');
+
+      const doList = Object.keys(regions);
+      const randDo = doList[Math.floor(Math.random() * doList.length)];
+      const sigunList = regions[randDo];
+      const randSigun = sigunList[Math.floor(Math.random() * sigunList.length)];
+
+      doElem.innerText = randDo;
+      sigunElem.innerText = randSigun;
+
+      const fullName = randDo + " " + randSigun;
+
+      // Kakao Geocoder로 좌표 검색
+      geocoder.addressSearch(fullName, function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          map.setCenter(coords);
+          map.setLevel(9);
+
+          if (marker) marker.setMap(null);
+          if (circle) circle.setMap(null);
+
+          marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+          });
+
+          circle = new kakao.maps.Circle({
+            center: coords,
+            radius: 3000,
+            strokeWeight: 3,
+            strokeColor: '#FF3DE5',
+            strokeOpacity: 0.9,
+            fillColor: '#FF8FE5',
+            fillOpacity: 0.5,
+            map: map
+          });
+        } else {
+          alert("위치를 찾을 수 없습니다: " + fullName);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
