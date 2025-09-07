@@ -16,7 +16,41 @@
       font-size: 0.8em; padding: 10px; margin-top: 10px; cursor: pointer;
       border: none; border-radius: 10px; background-color: #4CAF50; color: white;
     }
-    #gptResult { max-width: 780px; margin: 12px auto; text-align: left; white-space: pre-wrap; }
+    #gptResult {
+      max-width: 780px;
+      margin: 20px auto;
+      padding: 16px 20px;
+      text-align: left;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    
+      /* 카드 느낌 */
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    
+      /* 글자 꾸미기 */
+      font-size: 0.95em;
+      color: #333;
+    }
+    
+    #gptResult h4 {
+      margin: 0 0 10px 0;
+      font-size: 1.1em;
+      color: #2c3e50;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 4px;
+    }
+    
+    #gptResult ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    
+    #gptResult li {
+      margin-bottom: 6px;
+    }
   </style>
 
   <!-- 1) 지역 데이터 -->
@@ -43,5 +77,6 @@
   <div id="gptResult"></div>
 </body>
 </html>
+
 
 
