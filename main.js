@@ -77,7 +77,7 @@ async function sendToGPT(randDo, randSigun) {
       prompt: `
 당신은 한국 여행 큐레이터입니다.
 지역: ${fullName}
-요청: 3시간 안에 가볍게 즐길 수 있는 명소 3곳과 대표 먹거리 3가지를, 한 줄 설명과 함께 추천해 주세요.
+요청: 3시간 안에 가볍게 즐길 수 있는 명소 3곳과 대표 먹거리 3가지를, 한 줄 설명과 함께 추천해 주세요. 먹거리는 가게도 추천해 주세요.
 형식:
 [관광지]
 1) ...
@@ -118,6 +118,5 @@ function formatGPTResponse(text) {
     }
     html += "</ul>";
   }
-  console.log(html);
   return html;
 };
