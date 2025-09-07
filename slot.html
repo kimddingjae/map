@@ -1,154 +1,42 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>띵재의 랜덤여행</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body { font-family: sans-serif; text-align: center; margin: 0; padding: 0; }
     #map { width: 100%; height: 400px; margin-top: 10px; }
     .slot {
-      font-size: 0.8em;
-      margin: 10px;
-      padding: 10px;
-      border: 2px solid #444;
-      border-radius: 8px;
-      display: inline-block;
-      width: 80px;
-      
-      background-color: #f2f2f2;
+      font-size: 0.8em; margin: 10px; padding: 10px;
+      border: 2px solid #444; border-radius: 8px;
+      display: inline-block; width: 80px; background-color: #f2f2f2;
     }
     button {
-      font-size: 0.8em;
-      padding: 10px;
-      margin-top: 10px;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      background-color: #4CAF50;
-      color: white;
+      font-size: 0.8em; padding: 10px; margin-top: 10px; cursor: pointer;
+      border: none; border-radius: 10px; background-color: #4CAF50; color: white;
     }
-    
   </style>
-  <!-- ✅ Kakao Maps API 스크립트 (defer 안 씀 → 아래서 window.onload 사용) -->
+
+  <!-- 1) 지역 데이터 -->
+  <script src="city.js"></script>
+
+  <!-- 2) Kakao Maps (운영에선 노출키 사용 지양) -->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=dad017c4813a35cb8acfc0a9f2e38ed1&libraries=services"></script>
+
+  <!-- 3) 메인 로직 -->
+  <script src="main.js" defer></script>
 </head>
 <body>
 
-  <h3 style="margin:0px;">띵재의 랜덤여행</h3>
+  <h3 style="margin:0;">띵재의 랜덤여행</h3>
 
   <div>
     <div class="slot" id="do">도/광역시</div>
     <div class="slot" id="sigun">시/군/구</div>
-    <button onclick="spin()">돌리기</button>
+    <button id="spinBtn">돌리기</button>
   </div>
 
- 
-
   <div id="map"></div>
-
-  <script>
-    let map, geocoder, marker, circle;
-
-    const regions = {
-      "부산광역시": ["부산"],
-      "대구광역시": ["대구"],
-      "인천광역시": ["인천"],
-      "대전광역시": ["대전"],
-      "울산광역시": ["울산"],
-      "세종특별자치시": ["세종시"],
-      "경기도": ["수원시", "성남시", "고양시", "용인시", "부천시", "안산시", "안양시", "남양주시", "화성시", "평택시", "의정부시", "시흥시", "파주시", "광명시", "김포시", "군포시", "광주시", "이천시", "양주시", "오산시", "구리시", "안성시", "포천시", "의왕시", "하남시", "여주시", "동두천시", "과천시", "가평군", "양평군", "연천군"],
-      "강원특별자치도": ["춘천시", "원주시", "강릉시", "동해시", "태백시", "속초시", "삼척시", "홍천군", "횡성군", "영월군", "평창군", "정선군", "철원군", "화천군", "양구군", "인제군", "고성군", "양양군"],
-      "충청북도": ["청주시", "충주시", "제천시", "보은군", "옥천군", "영동군", "진천군", "괴산군", "음성군", "단양군", "증평군"],
-      "충청남도": ["천안시", "공주시", "보령시", "아산시", "서산시", "논산시", "계룡시", "당진시", "금산군", "부여군", "서천군", "청양군", "홍성군", "예산군", "태안군"],
-      "전북특별자치도": ["전주시", "군산시", "익산시", "정읍시", "남원시", "김제시", "완주군", "진안군", "무주군", "장수군", "임실군", "순창군", "고창군", "부안군"],
-      "전라남도": ["목포시", "나주시", "광양시", "담양군", "곡성군", "구례군", "고흥군", "보성군", "화순군", "장흥군", "강진군", "해남군", "영암군", "무안군", "함평군", "영광군", "장성군", "완도군", "진도군", "신안군"],
-      "경상북도": ["포항시", "경주시", "김천시", "안동시", "구미시", "영주시", "영천시", "상주시", "문경시", "경산시", "군위군", "의성군", "청송군", "영양군", "영덕군", "청도군", "고령군", "성주군", "칠곡군", "예천군", "봉화군", "울진군", "울릉군"],
-      "경상남도": ["창원시", "진주시", "통영시", "사천시", "김해시", "밀양시",  "의령군", "함안군", "창녕군", "고성군", "남해군", "하동군", "산청군", "함양군", "거창군", "합천군"]
-      /*,"제주특별자치도": ["제주시", "서귀포시"]*/
-    };
-
-    window.onload = function () {
-      const mapContainer = document.getElementById('map');
-      const mapOption = {
-        center: new kakao.maps.LatLng(36.5, 127.5),
-        level: 13
-      };
-
-      map = new kakao.maps.Map(mapContainer, mapOption);
-      geocoder = new kakao.maps.services.Geocoder();
-    };
-
-    function spin() {
-      const doElem = document.getElementById('do');
-      const sigunElem = document.getElementById('sigun');
-
-      const doList = Object.keys(regions);
-      const randDo = doList[Math.floor(Math.random() * doList.length)];
-      const sigunList = regions[randDo];
-      const randSigun = sigunList[Math.floor(Math.random() * sigunList.length)];
-
-      doElem.innerText = randDo;
-      sigunElem.innerText = randSigun;
-
-      const fullName = randDo + " " + randSigun;
-
-      // Kakao Geocoder로 좌표 검색
-      geocoder.addressSearch(fullName, function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-         // map.setCenter(coords);
-          map.setLevel(13);
-
-          if (marker) marker.setMap(null);
-          if (circle) circle.setMap(null);
-
-          marker = new kakao.maps.Marker({
-            map: map
-            //position: coords
-          });
-
-          circle = new kakao.maps.Circle({
-            center: coords,
-            radius: 3000,
-            strokeWeight: 3,
-            strokeColor: '#FF3DE5',
-            strokeOpacity: 1,
-            fillColor: '#FF8FE5',
-            fillOpacity: 1,
-            map: map
-          });
-        } else {
-          alert("위치를 찾을 수 없습니다: " + fullName);
-        }
-      });
-    }
-  </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
