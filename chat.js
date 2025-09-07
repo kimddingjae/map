@@ -1,6 +1,5 @@
 const CHAT_API_URL = "https://random-trip-backend.vercel.app/api/chat";
 
-
 window.askGPT = async function askGPT({ messages, prompt, signal } = {}) {
   const body = messages
     ? { messages }
@@ -8,16 +7,13 @@ window.askGPT = async function askGPT({ messages, prompt, signal } = {}) {
 
   const res = await fetch(CHAT_API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" }, // ← 이게 있으면 브라우저가 OPTIONS 예비요청 보냄
     body: JSON.stringify(body),
+    mode: "cors",
     signal
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`Chat API error: ${res.status} ${text}`);
-  }
-
+  if (!res.ok) throw new Error(`Chat API error: ${res.status} ${await res.text()}`);
   const data = await res.json();
-  return data.content; // 서버에서 { content: "..." } 로 응답하게 맞춰둠
+  return data.content;
 };
