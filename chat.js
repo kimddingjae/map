@@ -1,4 +1,5 @@
-const CHAT_API_URL = "https://kimddingjae.github.io/map/slot.html";
+const CHAT_API_URL = "https://random-trip-backend.vercel.app/api/chat";
+
 
 window.askGPT = async function askGPT({ messages, prompt, signal } = {}) {
   const body = messages
