@@ -117,5 +117,6 @@ function formatGPTResponse(text) {
     }
     html += "</ul>";
   }
+  console.log(html);
   return html;
 };
