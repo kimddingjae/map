@@ -61,11 +61,12 @@ function spin() {
   });
 
   sendToGPT(randDo, randSigun)
-}
-// GPT 호출 함수
-async function sendToGPT(randDo, randSigun) {
+}async function sendToGPT(randDo, randSigun) {
+  const el = document.getElementById('gptResult');
+  el.textContent = "GPT 추천을 불러오는 중...";
+
   if (!window.askGPT) {
-    console.error("askGPT 함수(chat.js)가 로드되지 않았습니다.");
+    el.textContent = "chat.js(askGPT)가 로드되지 않았습니다.";
     return;
   }
 
@@ -75,21 +76,22 @@ async function sendToGPT(randDo, randSigun) {
       prompt: `
 당신은 한국 여행 큐레이터입니다.
 지역: ${fullName}
-요청: 이 지역에서 추천할만한 관광지와 대표 먹거리 3개씩을 간단 설명과 함께 알려주세요.
-출력 형식은:
+요청: 3시간 안에 가볍게 즐길 수 있는 명소 3곳과 대표 먹거리 3가지를, 한 줄 설명과 함께 추천해 주세요.
+형식:
 [관광지]
 1) ...
 2) ...
+3) ...
 [먹거리]
 1) ...
 2) ...
-이렇게 해주세요.`
+3) ...
+`
     });
-
-    console.log("[ChatGPT 응답]", content);
-    alert(content); // 간단히 알림창으로 표시 (원하면 UI에 넣어도 됨)
+    el.textContent = content;
+    console.log("[ChatGPT 추천]", content);
   } catch (e) {
-    console.error("GPT 호출 실패:", e);
-    alert("GPT 추천을 불러오지 못했습니다.");
+    console.error(e);
+    el.textContent = "GPT 추천을 불러오지 못했습니다.\n" + e.message;
   }
 }
