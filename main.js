@@ -117,4 +117,4 @@ function formatGPTResponse(text) {
     html += "</ul>";
   }
   return html;
-}
+};
