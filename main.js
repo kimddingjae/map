@@ -60,8 +60,7 @@ function spin() {
     }
   });
 
-  sendToGPT(randDo, randSigun)
-}async function sendToGPT(randDo, randSigun) {
+async function sendToGPT(randDo, randSigun) {
   const el = document.getElementById('gptResult');
   el.textContent = "GPT 추천을 불러오는 중...";
 
@@ -88,10 +87,34 @@ function spin() {
 3) ...
 `
     });
-    el.textContent = content;
-    console.log("[ChatGPT 추천]", content);
+
+    // 문자열을 HTML로 변환
+    el.innerHTML = formatGPTResponse(content);
+
   } catch (e) {
     console.error(e);
     el.textContent = "GPT 추천을 불러오지 못했습니다.\n" + e.message;
   }
+}
+
+// GPT 응답 문자열 → HTML 변환 함수
+function formatGPTResponse(text) {
+  let html = "";
+  const sections = text.split(/\[(.*?)\]/g); 
+  // → ["", "관광지", "\n1) ...", "먹거리", "\n1) ..."]
+
+  for (let i = 1; i < sections.length; i += 2) {
+    const title = sections[i].trim();
+    const body = sections[i + 1].trim();
+
+    const items = body.split(/\d+\)\s*/).filter(Boolean); 
+    // ["장소 - 설명", "장소 - 설명", ...]
+
+    html += `<h4>${title}</h4><ul>`;
+    for (const item of items) {
+      html += `<li>${item.trim()}</li>`;
+    }
+    html += "</ul>";
+  }
+  return html;
 }
