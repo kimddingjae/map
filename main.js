@@ -27,7 +27,7 @@ function spin() {
   sigunElem.innerText = randSigun;
 
   const fullName = randDo + " " + randSigun;
-
+  sendToGPT(randDo, randSigun)
   geocoder.addressSearch(fullName, function (result, status) {
     if (status === kakao.maps.services.Status.OK && result && result.length) {
       const lat = parseFloat(result[0].y);
@@ -59,6 +59,7 @@ function spin() {
       alert("위치를 찾을 수 없습니다: " + fullName);
     }
   });
+  
 }
 
 async function sendToGPT(randDo, randSigun) {
