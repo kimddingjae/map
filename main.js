@@ -48,11 +48,11 @@ function spin() {
       circle = new kakao.maps.Circle({
         center: coords,
         radius: 3000,
-        strokeWeight: 1,
+        strokeWeight: 3,
         strokeColor: '#FF3DE5',
         strokeOpacity: 1,
         fillColor: '#FF8FE5',
-        fillOpacity: 0.7,
+        fillOpacity: 1,
         map: map
       });
     } else {
