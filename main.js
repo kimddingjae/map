@@ -34,21 +34,21 @@ function spin() {
       const lng = parseFloat(result[0].x);
       const coords = new kakao.maps.LatLng(lat, lng);
 
-      map.panTo(coords);
-      map.setLevel(6); // 지역이 잘 보이도록 확대
+      //map.panTo(coords);
+      map.setLevel(13); // 지역이 잘 보이도록 확대
 
       if (marker) marker.setMap(null);
       if (circle) circle.setMap(null);
 
       marker = new kakao.maps.Marker({
         map: map,
-        position: coords
+        //position: coords
       });
 
       circle = new kakao.maps.Circle({
         center: coords,
         radius: 3000,
-        strokeWeight: 3,
+        strokeWeight: 1,
         strokeColor: '#FF3DE5',
         strokeOpacity: 1,
         fillColor: '#FF8FE5',
