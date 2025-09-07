@@ -41,7 +41,7 @@ function spin() {
       if (circle) circle.setMap(null);
 
       marker = new kakao.maps.Marker({
-        map: map,
+        map: map
         //position: coords
       });
 
