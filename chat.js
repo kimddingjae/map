@@ -1,10 +1,11 @@
-// chat.js
+const CHAT_API_URL = "https://kimddingjae.github.io/map/slot.html";
+
 window.askGPT = async function askGPT({ messages, prompt, signal } = {}) {
   const body = messages
     ? { messages }
     : { messages: [{ role: "user", content: String(prompt ?? "") }] };
 
-  const res = await fetch("/api/chat", {
+  const res = await fetch(CHAT_API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -17,5 +18,5 @@ window.askGPT = async function askGPT({ messages, prompt, signal } = {}) {
   }
 
   const data = await res.json();
-  return data.content;
+  return data.content; // 서버에서 { content: "..." } 로 응답하게 맞춰둠
 };
