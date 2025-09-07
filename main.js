@@ -59,6 +59,7 @@ function spin() {
       alert("위치를 찾을 수 없습니다: " + fullName);
     }
   });
+}
 
 async function sendToGPT(randDo, randSigun) {
   const el = document.getElementById('gptResult');
