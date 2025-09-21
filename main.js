@@ -125,10 +125,10 @@ function formatGPTResponse(text) {
 };
 
 function showLoading() {
-  document.getElementById("loadingGif").style.display = "block";
+  document.getElementById("loadingOverlay").style.display = "flex";
 }
 
 function hideLoading() {
-  document.getElementById("loadingGif").style.display = "none";
+  document.getElementById("loadingOverlay").style.display = "none";
 }
 
