@@ -52,6 +52,21 @@
     #gptResult li {
       margin-bottom: 6px;
     }
+
+    #loadingOverlay {
+      position: fixed;
+      inset: 0; /* top:0; right:0; bottom:0; left:0 과 같음 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3); /* 살짝 어둡게. 완전 투명 원하면 0으로 */
+      z-index: 9999;
+    }
+    
+    #loadingOverlay img {
+      width: 64px;  /* 필요시 크기 조정 */
+      height: 64px;
+    }
   </style>
 
   <!-- 1) 지역 데이터 -->
@@ -66,9 +81,10 @@
 </head>
 <body>
 <!-- 로딩 GIF -->
-<img id="loadingGif" src="spinner-blue.gif" alt="로딩 중..."
-     style="display:none; width:48px; height:48px; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999;">
-
+  <div id="loadingOverlay" style="display:none;">
+    <img src="spinner-blue.gif" alt="Loading...">
+  </div>
+  
   <h3 style="margin-top:10px;">띵재의 랜덤여행</h3>
 
   <div>
@@ -81,6 +97,7 @@
   <div id="gptResult"></div>
 </body>
 </html>
+
 
 
 
