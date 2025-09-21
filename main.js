@@ -15,6 +15,7 @@ window.onload = function () {
 };
 
 function spin() {
+  showLoading();
   const doElem = document.getElementById('do');
   const sigunElem = document.getElementById('sigun');
 
@@ -94,6 +95,7 @@ async function sendToGPT(randDo, randSigun) {
     el.innerHTML = formatGPTResponse(content);
 
   } catch (e) {
+    hideLoading();
     console.error(e);
     el.textContent = "GPT 추천을 불러오지 못했습니다.\n" + e.message;
   }
@@ -101,6 +103,7 @@ async function sendToGPT(randDo, randSigun) {
 
 // GPT 응답 문자열 → HTML 변환 함수
 function formatGPTResponse(text) {
+  hideLoading();
   let html = "";
   const sections = text.split(/\[(.*?)\]/g); 
   // → ["", "관광지", "\n1) ...", "먹거리", "\n1) ..."]
@@ -120,3 +123,12 @@ function formatGPTResponse(text) {
   }
   return html;
 };
+
+function showLoading() {
+  document.getElementById("loadingGif").style.display = "block";
+}
+
+function hideLoading() {
+  document.getElementById("loadingGif").style.display = "none";
+}
+
